@@ -2,15 +2,13 @@
 $(function() {
     var getPK = function(callback) {
         chrome.storage.sync.get('alacrisPublicKey', function(items){
-            if(items.alacrisPublicKey) {
-                callback(items.alacrisPublicKey);
-            }
+            callback(items.alacrisPublicKey);
         })
     };
 
     var setPK = function(updatedValue){
         chrome.storage.sync.set({'alacrisPublicKey': updatedValue}, function() {
-            console.log("Public Key is Set!");
+            showCorrectScreen();
         });
     };
     
@@ -23,13 +21,13 @@ $(function() {
 
     var resetPK = function() {
         chrome.storage.sync.remove('alacrisPublicKey', function(){
+            $('#public_key').val(null);
             showCorrectScreen();
         });
     };
 
     var showCorrectScreen = function(){
         getPK(function(pkResult){
-            console.log(pkResult);
             if(pkResult != undefined){
                 updateDisplay();
                 $('#public_key_form').hide();
@@ -54,6 +52,5 @@ $(function() {
     $('#public_key_form').submit(function(event){
         event.preventDefault()
         setPK($('#public_key').val());
-        showCorrectScreen();
     });
 });
