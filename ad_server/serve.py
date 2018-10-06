@@ -61,4 +61,6 @@ def serve(viewer, publisher):
            maybe_pay(sender=SERVER_KEY, recipient=publisher,
                      amount=ad.publisher_reward))
     return json.dumps(
-        dict(viewer=viewer, publisher=publisher, **ad._asdict()))
+        dict(viewer=viewer, publisher=publisher,
+             **ad._asdict())['advertisement']
+    )
