@@ -30,7 +30,7 @@ INSERT INTO advertisers (username, balance, password, address) VALUES (
 INSERT INTO advertisements (
        advertiser, price, publisher_reward, viewer_reward, advertisement
        ) VALUES (
-         0,
+         1,
          100,
          200,
          50,

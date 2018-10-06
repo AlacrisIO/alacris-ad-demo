@@ -12,7 +12,8 @@ bp = Blueprint('serve', __name__, url_prefix='/ad_server')
 
 
 class Ad(namedtuple(
-        'Ad', 'advertiser balance advert our_price pub_reward view_reward')):
+        'Ad', 'advertiser balance advertisement price publisher_reward '
+        'viewer_reward')):
     "Information about an advertisement"
 
 
@@ -22,25 +23,21 @@ def maybe_choose_ad():
         'SELECT advertiser, advertisement, price, publisher_reward,'
         'viewer_reward FROM advertisements ORDER BY RANDOM() LIMIT 1;'
     ).fetchone()
-    raise str(type(ad_raw[0]))
-    balance = db.execute('SELECT balance FROM advertiser where id=?',
-                         ad_raw[0])
-    ad = Ad(balance=balance, **dict(zip(ad_raw.keys, ad_raw)))
-    cost = ad.our_price + ad.pub_reward + ad.view_reward
+    advertiser = ad_raw[0]
+    balance = int(
+        db.execute('SELECT id, balance FROM advertisers WHERE id=?;',
+                         str(advertiser)).fetchone()[1])
+    ad = Ad(balance=balance, **dict(zip(ad_raw.keys(), ad_raw)))
+    cost = ad.price + ad.publisher_reward + ad.viewer_reward
     if cost < balance:
         db.execute('UPDATE advertisers SET balance=? WHERE id=?',
-                   ad.balance - ad.cost, ad.advertiser)
+                   (ad.balance - cost, ad.advertiser))
         db.commit()  # XXX: These need to be serialized for speed
         return ad
     return None
 
 
 def choose_ad():
-    db = get_db()
-    return repr(type((db.execute(
-        'SELECT advertiser, advertisement, price, publisher_reward,'
-        'viewer_reward FROM advertisements ORDER BY RANDOM() LIMIT 1;'
-    ).fetchone()[0])))
     while True:
         ad = maybe_choose_ad()
         if ad: return ad
@@ -50,6 +47,6 @@ def choose_ad():
 def serve(viewer, publisher):
     # viewer = request.form['viewer']  # Only good for POST
     # publisher = request.form['publisher']
-    return json.dumps(choose_ad())
+    return json.dumps(choose_ad()._asdict())
 
 
