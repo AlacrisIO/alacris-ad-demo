@@ -1,0 +1,19 @@
+{
+    "name": "Alacris Extension ETHSF",
+    "version": "0.1",
+    "description": "This is for the ETHSF Hackathon",
+    "permissions": ["storage", "tabs", "https://*/*", "http://*/*", "file://*/*"],
+    "background": {
+        "scripts": ["background.js"],
+        "persistent": true
+    },
+    "content_scripts": [{
+        "matches": ["https://*/*", "http://*/*", "file://*/*"],
+        "js": ["inject.js"]
+    }],
+    "browser_action": {
+        "default_popup": "popup.html"
+    },
+
+    "manifest_version": 2
+  }
