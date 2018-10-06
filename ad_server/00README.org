@@ -1,0 +1,12 @@
+* Initializing the db
+
+    export FLASK_APP=ad_server
+    export FLASK_ENV=development
+    flask init-db
+
+* Running the application
+
+    export FLASK_APP=ad_server
+    export FLASK_ENV=development
+    flask run
+    
