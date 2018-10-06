@@ -31,14 +31,16 @@ def maybe_choose_ad():
         'SELECT advertiser, advertisement, price, publisher_reward,'
         'viewer_reward FROM advertisements ORDER BY RANDOM() LIMIT 1;'
     ).fetchone()
-    advertiser = ad_raw[0]
-    balance = int( # XXX: Join would be faster?
-        db.execute('SELECT balance, id FROM advertisers WHERE id=?;',
-                         str(advertiser)).fetchone()[0])
-    ad = Ad(balance=balance, **dict(zip(ad_raw.keys(), ad_raw)))
+    advertiser_idx = ad_raw[0]
+    balance, advertiser, _ = ( # XXX: Join would be faster?
+        db.execute('SELECT balance, username, id FROM advertisers WHERE id=?;',
+                         str(advertiser_idx)).fetchone())
+    ad_dict = dict(zip(ad_raw.keys(), ad_raw), balance=int(balance),
+                   advertiser=advertiser)
+    ad = Ad(**ad_dict)
     if ad_affordable(ad):
         db.execute('UPDATE advertisers SET balance=? WHERE id=?',
-                   (ad.balance - ad_cost(ad), ad.advertiser))
+                   (ad.balance - ad_cost(ad), advertiser_idx))
         db.commit()  # XXX: These need to be serialized for speed
         return ad
     return None
