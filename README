@@ -1,0 +1,16 @@
+ETHSF Hackathon Project
+Alacris Ad Revenue Demo
+
+1. Browser Extension
+- Allows entry of public key
+- Allows Public Key to be pulled from a website
+- Allows Public Key to be deleted
+- Displays Alacris On-Chain Balance
+
+2. Host website
+- Sends JS that embeds an iframe ad that pulls Public Key from the Browser and creates the URL with both Public Keys so the Ad Supplier can pay out
+
+3. Ad Server
+- Parses both Public Keys from URL 
+- Makes a payment request to both Key
+- Display Ad
