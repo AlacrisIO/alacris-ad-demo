@@ -1,26 +1,52 @@
 
 $(function() {
-    window.test = "boom";
-    chrome.storage.onChanged.addListener(function(changes, namespace) {
-        for (key in changes) {
-          var storageChange = changes[key];
-          var publicKeyScript = "var alacris='" + storageChange.newValue + "';";
-          chrome.tabs.executeScript({
-            code: publicKeyScript
-          });
-          console.log('Storage key "%s" in namespace "%s" changed. ' +
-                      'Old value was "%s", new value is "%s".',
-                      key,
-                      namespace,
-                      storageChange.oldValue,
-                      storageChange.newValue);
+    var getPK = function() {
+        chrome.storage.sync.get('alacrisPublicKey', function(items){
+            if(items.alacrisPublicKey) {
+                return items.alacrisPublicKey;
+            }
+        })
+    };
+
+    var setPK = function(updatedValue){
+        return chrome.storage.sync.set({'alacrisPublicKey': updatedValue, function() {
+            console.log("Public Key is Set!");
+            return true;
+        }});
+    };
+    
+    var updateDisplay = function(){
+        $('#pk').text(getPK());
+    };
+
+    var resetPK = function() {
+        chrome.storage.sync.remove('alacrisPublicKey', function(){});
+    };
+
+    var showCorrectScreen = function(){
+        console.log(getPK());
+        if(getPK()){
+            updateDisplay();
+            $('#public_key_form').hide();
+            $('#alacrisDisplay').show();
+        } else {
+            $('#public_key_form').show();
+            $('#alacrisDisplay').hide();
         }
-      });
+    };
+
+    $("#resetPK").click(function(){
+        resetPK();
+        showCorrectScreen();
+    });
+
+    showCorrectScreen();
+    chrome.tabs.executeScript({
+        file: 'inject.js'
+    });
 
     $('#public_key_form').submit(function(event){
         event.preventDefault()
-        chrome.storage.sync.set({'alacrisPublicKey': $('#public_key').val()}, function() {
-            console.log("Public Key is Set!");
-          });
+        setPK($('#public_key').val());
     });
 });

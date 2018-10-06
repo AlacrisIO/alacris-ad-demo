@@ -2,7 +2,7 @@
     "name": "Alacris Extension ETHSF",
     "version": "0.1",
     "description": "This is for the ETHSF Hackathon",
-    "permissions": ["declarativeContent", "storage", "activeTab"],
+    "permissions": ["declarativeContent", "storage", "tabs", "https://*/*", "http://*/*"],
     "background": {
         "scripts": ["background.js"],
         "persistent": true
