@@ -4,7 +4,6 @@
         body.setAttribute('alacris',newValue);
     }
     chrome.storage.sync.get('alacrisPublicKey', function(items){
-        console.log("Items: " + items);
         if(items.alacrisPublicKey) {
             setBodyAttr(items.alacrisPublicKey);
         }

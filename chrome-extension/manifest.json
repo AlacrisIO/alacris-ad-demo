@@ -2,13 +2,17 @@
     "name": "Alacris Extension ETHSF",
     "version": "0.1",
     "description": "This is for the ETHSF Hackathon",
-    "permissions": ["declarativeContent", "storage", "tabs", "https://*/*", "http://*/*"],
+    "permissions": ["storage", "tabs", "https://*/*", "http://*/*"],
     "background": {
         "scripts": ["background.js"],
         "persistent": true
     },
-    "page_action": {
-    "default_popup": "popup.html"
+    "content_scripts": [{
+        "matches": ["https://*/*", "http://*/*"],
+        "js": ["inject.js"]
+    }],
+    "browser_action": {
+        "default_popup": "popup.html"
     },
 
     "manifest_version": 2

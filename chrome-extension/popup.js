@@ -1,7 +1,7 @@
 
 $(function() {
     const BASEAPI = '';
-    const BALANCEAPI = 'balance.json';
+    const BALANCEAPI = 'http://ec2-52-203-232-2.compute-1.amazonaws.com:8081/api/balance';
     var getPK = function(callback) {
         chrome.storage.sync.get('alacrisPublicKey', function(items){
             callback(items.alacrisPublicKey);
@@ -31,7 +31,7 @@ $(function() {
                 },
                 redirect: "follow", // manual, *follow, error
                 referrer: "no-referrer", // no-referrer, *client
-                body: JSON.stringify(data), // body data type must match "Content-Type" header
+                body: data, // body data type must match "Content-Type" header
             })
             .then((resp) => resp.json())
             .then(function(data) {
