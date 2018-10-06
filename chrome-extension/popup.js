@@ -1,43 +1,49 @@
 
 $(function() {
-    var getPK = function() {
+    var getPK = function(callback) {
         chrome.storage.sync.get('alacrisPublicKey', function(items){
             if(items.alacrisPublicKey) {
-                return items.alacrisPublicKey;
+                callback(items.alacrisPublicKey);
             }
         })
     };
 
     var setPK = function(updatedValue){
-        return chrome.storage.sync.set({'alacrisPublicKey': updatedValue, function() {
+        chrome.storage.sync.set({'alacrisPublicKey': updatedValue}, function() {
             console.log("Public Key is Set!");
-            return true;
-        }});
+        });
     };
     
     var updateDisplay = function(){
-        $('#pk').text(getPK());
+        getPK(function(pkResult){
+            $('#pk').text(pkResult);
+        });
+        
     };
 
     var resetPK = function() {
-        chrome.storage.sync.remove('alacrisPublicKey', function(){});
+        chrome.storage.sync.remove('alacrisPublicKey', function(){
+            showCorrectScreen();
+        });
     };
 
     var showCorrectScreen = function(){
-        console.log(getPK());
-        if(getPK()){
-            updateDisplay();
-            $('#public_key_form').hide();
-            $('#alacrisDisplay').show();
-        } else {
-            $('#public_key_form').show();
-            $('#alacrisDisplay').hide();
-        }
+        getPK(function(pkResult){
+            console.log(pkResult);
+            if(pkResult != undefined){
+                updateDisplay();
+                $('#public_key_form').hide();
+                $('#alacrisDisplay').show();
+            } else {
+                $('#public_key_form').show();
+                $('#alacrisDisplay').hide();
+            }
+        });
+        
     };
 
     $("#resetPK").click(function(){
         resetPK();
-        showCorrectScreen();
     });
 
     showCorrectScreen();
@@ -48,5 +54,6 @@ $(function() {
     $('#public_key_form').submit(function(event){
         event.preventDefault()
         setPK($('#public_key').val());
+        showCorrectScreen();
     });
 });
