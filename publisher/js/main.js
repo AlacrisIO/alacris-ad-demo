@@ -6,7 +6,7 @@ $(function() {
         var viewerKey = $('body').attr('alacris');
         if (viewerKey){
             var adURL = `http://ec2-52-203-232-2.compute-1.amazonaws.com:5000/ad_server/serve/viewer/${viewerKey}/publisher/${publisherKey}`;
-            $('#ad_here').html(`<iframe src='${adURL}'></iframe>`);
+            $('#ad_here').html(`<iframe scrolling="no" frameborder="0" src='${adURL}'></iframe>`);
             clearInterval(adInterval);
         }    
     }, 1000);

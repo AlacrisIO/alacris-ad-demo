@@ -97,7 +97,27 @@ textarea {
    Author's custom styles
    ========================================================================== */
 
+h1 {
+    text-align: center;
+    font-size:3em;
+}
 
+p {
+    font-size:2em;
+    text-align: center;
+}
+
+.ad {
+    display:block;
+    margin: 1em auto;
+    width:288px;
+    height:180px;
+}
+
+iframe {
+    height:180px;
+    width: 288px;
+}
 
 
 
