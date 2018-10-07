@@ -1,3 +1,7 @@
+* Building
+
+    pip install -r requirements.txt
+
 * Initializing the db
 
     export FLASK_APP=ad_server
@@ -6,7 +10,18 @@
 
 * Running the application
 
+  Starting in the same CWD as this README.
+
+  The working files (DB, etc.) are in `instance/`
+
+** Debug mode
+    
     export FLASK_APP=ad_server
     export FLASK_ENV=development
-    flask run
-    
+    ( cd ad_server ; flask run ) # <--- Note the different CWD!! 
+
+    To expose to all network interfaces, `flask run --host 0.0.0.0`.
+
+** Production mode
+
+    waitress-serve --port=5000 --call 'ad_server.ad_server:create_app' 

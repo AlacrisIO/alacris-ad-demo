@@ -5,9 +5,9 @@ from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
 )
 
-from .config import SERVER_KEY
-from .db import get_db
-from .pay import maybe_pay
+from config import SERVER_KEY
+from db import get_db
+from pay import maybe_pay
 
 bp = Blueprint('serve', __name__, url_prefix='/ad_server')
 
